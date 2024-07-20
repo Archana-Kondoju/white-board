@@ -7,7 +7,7 @@ import classes from './index.module.css';
 function Board() {
   const canvasRef=useRef();
   const textAreaRef=useRef();
-  const {elements,toolActionType,boardMouseDownHandler,boardMouseMoveHandler,boardMouseUpHandler,textAreaBlurHandler}=useContext(boardContext)
+  const {elements,toolActionType,boardMouseDownHandler,boardMouseMoveHandler,boardMouseUpHandler,textAreaBlurHandler,undo,redo}=useContext(boardContext)
   const {toolboxState}=useContext(toolboxContext)
   useLayoutEffect(
     ()=>{
@@ -17,11 +17,24 @@ function Board() {
   },[]);
 
   useEffect(()=>{
+    function handleKeyDown(event){
+      if(event.ctrlKey && event.key==='z'){
+        undo();
+      }
+      else if(event.ctrlKey && event.key==='y'){
+        redo();
+      }
+    }
+    document.addEventListener('keydown',handleKeyDown);
+    return()=>{
+      document.removeEventListener("keydown",handleKeyDown);
+    }
+  },[undo,redo])
+  useEffect(()=>{
       const canvas=canvasRef.current;
       const context=canvas.getContext("2d");
       context.save();
       const roughCanvas=rough.canvas(canvas);
-      // console.log(elements);
       if(elements.length>0){
         elements.forEach((element) =>{
           switch (element.type) {
@@ -37,7 +50,6 @@ function Board() {
               context.restore();
               break;
             case TOOL_ITEMS.TEXT:
-              // console.log('arc');
             {
               context.textBaseline="top";
               context.font=`${element.size}px Caveat`;
@@ -63,7 +75,6 @@ function Board() {
         textarea.focus();
       },0);
     }
-    // textarea.value=elements[elements.length-1]?.text;
   },[toolActionType]);
   const handleMouseDown=(event)=> {
     boardMouseDownHandler(event,toolboxState);
@@ -89,10 +100,10 @@ function Board() {
         fontSize:`${elements[elements.length-1]?.size}px`,
         color:elements[elements.length-1]?.stroke
       }}
-      onBlur={(event)=>textAreaBlurHandler(event.target.value,toolboxState)}
+      onBlur={(event)=>textAreaBlurHandler(event.target.value)}
     />)
     }
-    <canvas ref={canvasRef} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}/>
+    <canvas id="canvas" ref={canvasRef} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}/>
     </>
   );
 }

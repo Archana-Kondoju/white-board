@@ -1,4 +1,4 @@
-import React, {  useReducer } from 'react'
+import React, { useCallback, useReducer } from 'react'
 import boardContext from './board-context'
 import { TOOL_ACTION_TYPES, TOOL_ITEMS } from '../constant';
 import { BOARD_ACTIONS } from './../constant';
@@ -71,12 +71,11 @@ const boardReducer = (state, action) => {
       }
     }
     case BOARD_ACTIONS.ERASE: {
-      const {clientX:pointX,clientY:pointY}=action.payload;
-            let newElements=[...state.elements];
-            newElements=newElements.filter(element=>{
-                return !isPointNearElement({element,pointX,pointY});
-            });
-      // console.log(newElements);
+      const { clientX, clientY } = action.payload;
+      let newElements = [...state.elements];
+      newElements=newElements.filter(element=>{
+        return !isPointNearElement(element,clientX,clientY);
+      });
       const newHistory=state.history.slice(0,state.index+1);
       newHistory.push(newElements);
       return {
@@ -132,8 +131,7 @@ const initialBoardState={
 const BoardProvider = ({children}) => {
   const [boardState,dispatchBoardAction]=useReducer(boardReducer,initialBoardState);
   const changeToolHandler=(tool)=>{
-    dispatchBoardAction({
-      type: BOARD_ACTIONS.CHANGE_TOOL, 
+    dispatchBoardAction({type: BOARD_ACTIONS.CHANGE_TOOL, 
       payload:{
         tool,
       }})
@@ -190,13 +188,8 @@ const BoardProvider = ({children}) => {
   }
 
   const boardMouseUpHandler=()=>{
-    if(boardState.toolActionType!==TOOL_ACTION_TYPES.WRITING){
-      dispatchBoardAction({
-        type:BOARD_ACTIONS.CHANGE_ACTION_TYPE,
-        payload:{
-          actionType: TOOL_ACTION_TYPES.NONE
-        }
-      })
+    if(boardState.toolActionType===TOOL_ACTION_TYPES.WRITING){
+      return;
     }
     if(boardState.toolActionType===TOOL_ACTION_TYPES.DRAWING){
       dispatchBoardAction({
@@ -211,7 +204,7 @@ const BoardProvider = ({children}) => {
     })
   }
 
-  const textAreaBlurHandler = (text,toolboxState) =>{
+  const textAreaBlurHandler = (text) =>{
     dispatchBoardAction({
       type:BOARD_ACTIONS.CHANGE_TEXT,
       payload:{
@@ -220,18 +213,17 @@ const BoardProvider = ({children}) => {
     })
   }
 
-  const boardUndoHandler=()=>{
-    if(boardState.index<0) return;
+  const boardUndoHandler=useCallback(()=>{
     dispatchBoardAction({
       type:BOARD_ACTIONS.UNDO
     })
-  }
+  },[]);
 
-  const boardRedoHandler=()=>{
+  const boardRedoHandler=useCallback(()=>{
     dispatchBoardAction({
       type:BOARD_ACTIONS.REDO
     })
-  }
+  },[]);
   const boardContextValue={
     activeToolItem: boardState.activeToolItem,
     elements: boardState.elements,

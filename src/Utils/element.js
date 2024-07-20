@@ -62,109 +62,51 @@ export const createElement=(id,x1,y1,x2,y2,{type,stroke,fill,size})=>{
     }
 };
 
-export const isPointNearElement=({element,pointX,pointY})=>{
+export const isPointNearElement=(element,pointX,pointY)=>{
     const {x1,x2,y1,y2}=element;
+  
     switch (element.type) {
         case TOOL_ITEMS.LINE:
         case TOOL_ITEMS.ARROW:
-                return isPointCloseToLine(x1,y1,x2,y2,pointX,pointY);
-        case TOOL_ITEMS.RECTANGLE:{
+            return isPointCloseToLine(x1,y1,x2,y2,pointX,pointY);
+        case TOOL_ITEMS.RECTANGLE:
+            return(
+                isPointCloseToLine(x1,y1,x2,y1,pointX,pointY) ||
+                isPointCloseToLine(x2,y1,x2,y2,pointX,pointY) ||
+                isPointCloseToLine(x2,y2,x1,y2,pointX,pointY) ||
+                isPointCloseToLine(x1,y2,x1,y1,pointX,pointY)
+            );
+        case TOOL_ITEMS.CIRCLE:
             return(
                 isPointCloseToLine(x1,y1,x2,y2,pointX,pointY) ||
                 isPointCloseToLine(x2,y1,x2,y2,pointX,pointY) ||
                 isPointCloseToLine(x2,y2,x1,y2,pointX,pointY) ||
                 isPointCloseToLine(x1,y2,x1,y1,pointX,pointY)
+            )
+            case TOOL_ITEMS.BRUSH:
+                const context = document.getElementById("canvas").getContext('2d');
+                return (
+                    context.isPointInPath(element.path,pointX,pointY)
+                )
+            case TOOL_ITEMS.TEXT:{
+            const context = document.getElementById("canvas").getContext('2d');
 
-            )
-        }
-        case TOOL_ITEMS.CIRCLE:{
-           
-            return(
-                isPointCloseToLine(x1,y1,x2,y2,pointX,pointY) ||
-                isPointCloseToLine(x2,y1,x2,y2,pointX,pointY) ||
-                isPointCloseToLine(x2,y2,x1,y2,pointX,pointY) ||
-                isPointCloseToLine(x1,y2,x1,y1,pointX,pointY)
-            )
-        }
-        case TOOL_ITEMS.BRUSH:
-            const context=document.getElementById("canvas").getContext("2d");
-            return (
-                context.isPointInPath(element.path,pointX,pointY)
-            )
-        case TOOL_ITEMS.TEXT:{
-            // console.log(element.text);
-           const context=document.getElementById("canvas").getContext("2d");
-           const textWidth=context.measureText(element.text).width;
-           const textHeight=parseInt(element.size);
-           context.restore();
-           return (
-                isPointCloseToLine(x1,y1,x1+textWidth,y1+textHeight,pointX,pointY) ||
-                isPointCloseToLine(x1+textWidth,y1,x1+textWidth,y1+textHeight,pointX,pointY)||
-                isPointCloseToLine(x1+textWidth,y1+textHeight,x1,y1+textHeight,pointX,pointY)||
-                isPointCloseToLine(x1,y1+textHeight,x1,y1,pointX,pointY)
-           )
-        }
+               context.font=`${element.size}px Caveat`;
+               context.fillStyle=element.stroke;
+               const textWidth=context.measureText(element.text).width;
+               const textHeight=parseInt(element.size);
+               context.restore();
+               return (
+                    isPointCloseToLine(x1,y1,x1+textWidth,y1+textHeight,pointX,pointY) ||
+                    isPointCloseToLine(x1+textWidth,y1,x1+textWidth,y1+textHeight,pointX,pointY)||
+                    isPointCloseToLine(x1+textWidth,y1+textHeight,x1,y1+textHeight,pointX,pointY)||
+                    isPointCloseToLine(x1,y1+textHeight,x1,y1,pointX,pointY)
+               )
+            }
         default:
-            break;
+            return false;
     }
 }
-
-// export const isPointNearElement=({element,pointX,pointY})=>{
-//     // console.log(element);
-//     const {x1,x2,y1,y2}=element;
-// //     const canvas = document.getElementById("canvas");
-// //   if (!canvas) {
-// //     console.error('Canvas element not found');
-// //     return false;
-// //   }
-// //   const context = canvas.getContext('2d');
-// //   if (!context) {
-// //     console.error('Canvas context not found');
-// //     return false;
-// //   }
-//     switch (element.type) {
-//         case TOOL_ITEMS.LINE:
-//         case TOOL_ITEMS.ARROW:
-//             return isPointCloseToLine(x1,y1,x2,y2,pointX,pointY);
-//         case TOOL_ITEMS.RECTANGLE:
-//             return(
-//                 isPointCloseToLine(x1,y1,x2,y1,pointX,pointY) ||
-//                 isPointCloseToLine(x2,y1,x2,y2,pointX,pointY) ||
-//                 isPointCloseToLine(x2,y2,x1,y2,pointX,pointY) ||
-//                 isPointCloseToLine(x1,y2,x1,y1,pointX,pointY)
-//             );
-//         case TOOL_ITEMS.CIRCLE:
-//             return(
-//                 isPointCloseToLine(x1,y1,x2,y2,pointX,pointY) ||
-//                 isPointCloseToLine(x2,y1,x2,y2,pointX,pointY) ||
-//                 isPointCloseToLine(x2,y2,x1,y2,pointX,pointY) ||
-//                 isPointCloseToLine(x1,y2,x1,y1,pointX,pointY)
-//             )
-//             case TOOL_ITEMS.BRUSH:
-//                 const context=document.getElementById("canvas").getContext("2d");
-//                 return (
-//                     context.isPointInPath(element.path,pointX,pointY)
-//                 )
-//             case TOOL_ITEMS.TEXT:{
-//                const canvas=document.getElementById("canvas");
-//                if(!canvas) console.log('error');
-//                const context=canvas.getContext("2d");
-//                context.font=`${element.size}px Caveat`;
-//                context.fillStyle=element.stroke;
-//                const textWidth=context.measureText(element.text).width;
-//                const textHeight=parseInt(element.size);
-//                context.restore();
-//                return (
-//                     isPointCloseToLine(x1,y1,x1+textWidth,y1+textHeight,pointX,pointY) ||
-//                     isPointCloseToLine(x1+textWidth,y1,x1+textWidth,y1+textHeight,pointX,pointY)||
-//                     isPointCloseToLine(x1+textWidth,y1+textHeight,x1,y1+textHeight,pointX,pointY)||
-//                     isPointCloseToLine(x1,y1+textHeight,x1,y1,pointX,pointY)
-//                )
-//             }
-//         default:
-//             return false;
-//     }
-// }
 export const getSvgPathFromStroke=(stroke)=>{
     if(!stroke.length) return "";
     const d=stroke.reduce(

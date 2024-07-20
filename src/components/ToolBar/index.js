@@ -2,13 +2,21 @@ import React, { useContext } from 'react'
 import classes from './index.module.css';
 import cx from 'classnames';
 import { LuRectangleHorizontal } from "react-icons/lu";
-import { FaSlash, FaRegCircle, FaArrowRight, FaPaintBrush, FaEraser, FaFont, FaUndoAlt, FaRedoAlt } from 'react-icons/fa';
+import { FaSlash, FaRegCircle, FaArrowRight, FaPaintBrush, FaEraser, FaFont, FaUndoAlt, FaRedoAlt, FaDownload } from 'react-icons/fa';
 
 import boardContext from '../../store/board-context';
 import { TOOL_ITEMS } from './../../constant';
 
 const ToolBar = () => {
   const {activeToolItem,changeToolHandler,undo,redo}=useContext(boardContext);
+  const handleDownloadClick=()=>{
+    const canvas=document.getElementById('canvas');
+    const data=canvas.toDataURL("image/png");
+    const anchor=document.createElement('a');
+    anchor.href=data;
+    anchor.download='board.png';
+    anchor.click();
+  }
   return (
     <div className={classes.container}>
       <div className={cx(classes.toolItem, {[classes.active]:activeToolItem===TOOL_ITEMS.BRUSH})}
@@ -38,6 +46,9 @@ const ToolBar = () => {
       <div className={classes.toolItem}
       onClick={redo}
       ><FaRedoAlt/></div>
+      <div className={classes.toolItem}
+      onClick={handleDownloadClick}
+      ><FaDownload/></div>
     </div>
   )
 }
