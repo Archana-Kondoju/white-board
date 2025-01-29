@@ -1,71 +1,28 @@
-# Getting Started with Create React App
+# Drawing Interface
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A web-based drawing interface that empowers users to create, edit, and download their artwork. The application provides a range of tools, including a brush, text input, geometric shapes, and essential functionalities like undo, redo, and an eraser.
 
-## Available Scripts
+## Features
+- **Brush Tool** - Freehand drawing with customizable stroke width and color.
+- **Text Input** - Add and edit text on the canvas.
+- **Geometric Shapes** - Draw predefined shapes like rectangles, circles, and lines.
+- **Undo & Redo** - Navigate through the drawing history.
+- **Eraser** - Remove unwanted parts of the drawing.
+- **Download Artwork** - Save your creation as an image file.
 
-In the project directory, you can run:
+## Technologies Used
+- **JavaScript** - Core scripting language for interactivity.
+- **Canvas API** - Enables rendering graphics and handling user drawings.
+- **Rough.js** - A library for drawing hand-sketched-style shapes and elements.
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Usage
+- Select a tool from the toolbar.
+- Draw on the canvas using the selected tool.
+- Use the undo/redo buttons to manage changes.
+- Click the download button to save your artwork.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+## Contact
+For any inquiries or feedback, please contact [archanakondojuk@gmail.com].
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# white-board
